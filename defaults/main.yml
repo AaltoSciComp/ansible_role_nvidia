@@ -1,12 +1,16 @@
 ---
-# defaults file for ansible_role_nvml
+# defaults file for ansible_role_nvidia
 
 nvidia_driver_branch: 535
 
 nvidia_install_nvml:   true
-nvidia_install_driver: false
+nvidia_install_driver: true
 
 nvidia_install_weak_deps: false
+
+nvidia_driver_module_file: /etc/modprobe.d/nvidia.conf
+nvidia_driver_module_params: ''
+nvidia_driver_persistence_mode_on: yes
 
 nvidia_driver_rhel_cuda_repo_baseurl: "https://developer.download.nvidia.com/compute/cuda/repos/{{ _rhel_repo_dir }}/"
 nvidia_driver_rhel_cuda_repo_gpgkey: "https://developer.download.nvidia.com/compute/cuda/repos/{{ _rhel_repo_dir }}/D42D0685.pub"

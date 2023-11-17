@@ -1,5 +1,5 @@
 ---
-# tasks file for ansible_role_nvml
+# tasks file for ansible_role_nvidia
 
 - name: add nvidia CUDA repo
   ansible.builtin.yum_repository:
@@ -12,21 +12,60 @@
 - name: Switch DNF nvidia-driver stream to the chosen branch
   ansible.builtin.command:
     cmd: "dnf -y module enable nvidia-driver:{{ nvidia_driver_branch }}"
-    
-- name: install nvidia management library from rpm repository 
+
+- name: install nvidia management library from rpm repository
   ansible.builtin.dnf:
     name: "nvidia-driver-NVML"
     state: latest
     install_weak_deps: "{{ nvidia_install_weak_deps }}"
   when: nvidia_install_nvml
 
+- name: Install nvidia drivers
+  block:
 
-- name: install precompiled nvidia drivers from rpm repository
-  ansible.builtin.dnf:
-    name:
-      - "nvidia-driver"
-      - "nvidia-driver-cuda"
-#    name: "@nvidia-driver:{{ nvidia_driver_branch }}"
-    state: latest
-    install_weak_deps: "{{ nvidia_install_weak_deps }}"
+  - name: install precompiled nvidia drivers from rpm repository
+    ansible.builtin.dnf:
+      name:
+        - "nvidia-driver"
+        - "nvidia-driver-cuda"
+  #    name: "@nvidia-driver:{{ nvidia_driver_branch }}"
+      state: latest
+      install_weak_deps: "{{ nvidia_install_weak_deps }}"
+
+  - name: blacklist nouveau
+    community.general.kernel_blacklist:
+      name: nouveau
+      state: present
+
+
+  - name: create persistenced override dir
+    ansible.builtin.file:
+      path: /etc/systemd/system/nvidia-persistenced.service.d/
+      state: directory
+      recurse: yes
+
+  - name: configure persistenced service to turn on persistence mode
+    ansible.builtin.copy:
+      src: nvidia-persistenced-override.conf
+      dest: /etc/systemd/system/nvidia-persistenced.service.d/override.conf
+    when: nvidia_driver_persistence_mode_on
+
+  - name: remove persistenced service override
+    ansible.builtin.file:
+      path: /etc/systemd/system/nvidia-persistenced.service.d/override.conf
+      state: absent
+    when: not nvidia_driver_persistence_mode_on
+
+  - name: enable persistenced
+    ansible.builtin.systemd:
+      name: nvidia-persistenced
+      enabled: yes
+    when: nvidia_driver_persistence_mode_on
+
+  - name: set module parameters
+    ansible.builtin.template:
+      src: nvidia.conf.j2
+      dest: "{{ nvidia_driver_module_file }}"
+      mode: '0644'
+
   when: nvidia_install_driver

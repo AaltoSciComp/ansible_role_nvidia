@@ -7,6 +7,6 @@
       ansible.builtin.copy:
         src: /etc/hosts
         dest: /tmp/hosts-from-controller
-    - name: "Include aaltoscicomp.ansible_role_nvml"
+    - name: "Include aaltoscicomp.ansible_role_nvidia"
       ansible.builtin.include_role:
-        name: "aaltoscicomp.ansible_role_nvml"
+        name: "aaltoscicomp.ansible_role_nvidia"

@@ -1,5 +1,5 @@
-ansible_role_nvml
-=================
+ansible_role_nvidia
+===================
 
 A small ansible role to install nvidia management library from Nvidia's rpm repository.
 
@@ -18,7 +18,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { nvml: : nvidia_driver_branch: 535 }
+         - { ansible_role_nvidia }
 
 License
 -------
