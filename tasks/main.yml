@@ -45,22 +45,22 @@
       recurse: yes
 
   - name: configure persistenced service to turn on persistence mode
-    ansible.builtin.copy:
-      src: nvidia-persistenced-override.conf
+    ansible.builtin.template:
+      src: nvidia-persistenced-override.conf.j2
       dest: /etc/systemd/system/nvidia-persistenced.service.d/override.conf
-    when: nvidia_driver_persistence_mode_on
+    when: nvidia_driver_persistenced
 
   - name: remove persistenced service override
     ansible.builtin.file:
       path: /etc/systemd/system/nvidia-persistenced.service.d/override.conf
       state: absent
-    when: not nvidia_driver_persistence_mode_on
+    when: not nvidia_driver_persistenced
 
   - name: enable persistenced
     ansible.builtin.systemd:
       name: nvidia-persistenced
       enabled: yes
-    when: nvidia_driver_persistence_mode_on
+    when: nvidia_driver_persistenced
 
   - name: set module parameters
     ansible.builtin.template:
