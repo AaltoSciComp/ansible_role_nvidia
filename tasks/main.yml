@@ -20,6 +20,15 @@
     install_weak_deps: "{{ nvidia_install_weak_deps }}"
   when: nvidia_install_nvml
 
+- name: Make certain that libnvidia-ml.so-symlink exists
+  ansible.builtin.file:
+    src: /usr/lib64/libnvidia-ml.so.1
+    dest: /usr/lib64/libnvidia-ml.so
+    owner: root
+    group: root
+    state: link
+  when: nvidia_install_nvml
+
 - name: Install nvidia drivers
   block:
 
