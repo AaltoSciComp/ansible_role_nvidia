@@ -1,3 +1,10 @@
 [Service]
+
+# To make sure we load the kernel drivers
+ExecStartPre=/usr/bin/nvidia-smi
+
+# to remove the old ExecStart line:
 ExecStart=
+
+# Use the dedicated user.
 ExecStart=/usr/bin/nvidia-persistenced --user nvidia-persistenced {{ '--persistence-mode' if nvidia_driver_persistence_mode_on else '--no-persistence-mode' }} --verbose
