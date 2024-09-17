@@ -15,7 +15,7 @@
 
 - name: install nvidia management library from rpm repository
   ansible.builtin.dnf:
-    name: "nvidia-driver-NVML{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
+    name: "{{nvidia_driver_nvml_package_name}}{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
     state: latest
     install_weak_deps: "{{ nvidia_install_weak_deps }}"
   when: nvidia_install_nvml
