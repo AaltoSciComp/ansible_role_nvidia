@@ -78,3 +78,35 @@
       mode: '0644'
 
   when: nvidia_install_driver
+
+
+- name: Install nvidia MIG parted
+  block:
+
+
+  - name: install precompiled nvidia mig-parted RPM from github
+    ansible.builtin.dnf:
+      name:
+        - "https://github.com/NVIDIA/mig-parted/releases/download/v{{ nvidia_mig_parted_version }}/nvidia-mig-manager-{{ nvidia_mig_parted_version }}-1.x86_64.rpm"
+      disable_gpg_check: yes
+      state: present
+
+  - name: Ensure slurmd service override directory exists
+    ansible.builtin.file:
+      path: /etc/systemd/system/slurmd.service.d
+      state: directory
+      mode: '0755'
+
+  - name: Create or update override to start slurmd after nvidia-mig-manager
+    ansible.builtin.copy:
+      dest: /etc/systemd/system/slurmd.service.d/nvidia-mig-manager-dep.conf
+      content: |
+        # Ansible managed (ansible_role_nvidia)
+        [Unit]
+        After=nvidia-mig-manager.service
+        Wants=nvidia-mig-manager.service
+      mode: '0644'
+      owner: root
+      group: root
+
+  when: nvidia_install_mig_parted|default(False)
