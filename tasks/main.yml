@@ -37,7 +37,7 @@
       name:
         - "nvidia-driver{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
         - "nvidia-driver-cuda{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
-  #    name: "@nvidia-driver:{{ nvidia_driver_branch }}"
+        - "nvidia-fabric-manager{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}" # this is needed for our H200s Will be enabled by an ww4 overlay.
       state: latest
       install_weak_deps: "{{ nvidia_install_weak_deps }}"
 
