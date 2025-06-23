@@ -35,6 +35,7 @@
   - name: install precompiled nvidia drivers from rpm repository
     ansible.builtin.dnf:
       name:
+        - "kmod-nvidia-latest-dkms{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
         - "nvidia-driver{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
         - "nvidia-driver-cuda{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
         - "nvidia-fabric-manager{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}" # this is needed for our H200s Will be enabled by an ww4 overlay.
