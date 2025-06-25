@@ -25,7 +25,7 @@ nvidia_driver_local_cuda_repo_baseurl: "https://url.com/repo2"
 nvidia_driver_local_cuda_gpgcheck: False
 nvidia_driver_local_cuda_repo_excludes: ""
 
-
+nvidia_driver_loadpeermem: False
 
 nvidia_install_mig_parted: false
 nvidia_mig_parted_version: 0.10.0

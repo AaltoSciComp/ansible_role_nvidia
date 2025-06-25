@@ -86,6 +86,15 @@
       dest: "{{ nvidia_driver_module_file }}"
       mode: '0644'
 
+  - name: Ensure nvidia-peermem is automatically loaded
+    copy:
+      dest: /etc/modules-load.d/nvidia-peermem.conf
+      content: "nvidia-peermem\n"
+      owner: root
+      group: root
+      mode: '0644'
+    when: nvidia_driver_loadpeermem
+
   when: nvidia_install_driver
 
 
