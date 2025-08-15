@@ -21,6 +21,7 @@
 - name: Switch DNF nvidia-driver stream to the chosen branch
   ansible.builtin.command:
     cmd: "dnf -y module enable nvidia-driver:{{ nvidia_driver_branch }}"
+  when: "{{ nvidia_driver_switch_stream | default( True ) }}"
 
 - name: install nvidia management library from rpm repository
   ansible.builtin.dnf:
@@ -46,7 +47,7 @@
       name:
         - "nvidia-driver{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
         - "nvidia-driver-cuda{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}"
-        - "nvidia-fabric-manager{{ '-' + nvidia_driver_version if nvidia_driver_version is defined else '' }}" # this is needed for our H200s Will be enabled by an ww4 overlay.
+        - "nvidia-fabric-manager{{ '-' + nvidia_driver_version if ( nvidia_driver_version is defined and nvidia_driver_fabric_manager_version | default( False ) ) else '' }}" # this is needed for our H200s Will be enabled by an ww4 overlay.
       state: latest
       install_weak_deps: "{{ nvidia_install_weak_deps }}"
 
