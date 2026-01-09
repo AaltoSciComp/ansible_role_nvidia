@@ -81,6 +81,19 @@
       enabled: yes
     when: nvidia_driver_persistenced
 
+  - name: install nvidia dcgm
+    ansible.builtin.dnf:
+      name: "{{ nvidia_dcgm_package }}"
+      state: latest
+      install_weak_deps: "{{ nvidia_install_weak_deps }}"
+    when: nvidia_install_dcgm
+
+  - name: enable dcgm service
+    ansible.builtin.systemd:
+      name: nvidia-dcgm.service
+      enabled: yes
+    when: nvidia_install_dcgm
+
   - name: set module parameters
     ansible.builtin.template:
       src: nvidia.conf.j2

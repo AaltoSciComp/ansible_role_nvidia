@@ -4,9 +4,11 @@
 nvidia_driver_branch: 535
 
 nvidia_driver_nvml_package_name: libnvidia-ml  # used to be nvidia-driver-NVML before 560 series
+nvidia_dcgm_package: "datacenter-gpu-manager-4-core"
 
 nvidia_install_nvml:   true
 nvidia_install_driver: false
+nvidia_install_dcgm:   true
 
 nvidia_install_weak_deps: false
 
