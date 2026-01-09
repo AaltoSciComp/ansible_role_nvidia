@@ -21,7 +21,7 @@
 - name: Switch DNF nvidia-driver stream to the chosen branch
   ansible.builtin.command:
     cmd: "dnf -y module enable nvidia-driver:{{ nvidia_driver_branch }}"
-  when: "{{ nvidia_driver_switch_stream | default( True ) }}"
+  when: nvidia_driver_switch_stream | default( True )
 
 - name: install nvidia management library from rpm repository
   ansible.builtin.dnf:
