@@ -51,6 +51,14 @@
       state: latest
       install_weak_deps: "{{ nvidia_install_weak_deps }}"
 
+  - name: install precompiled NVLink Subnet Manager (NVLSM) package from rpm repository
+    ansible.builtin.dnf:
+      name:
+        - nvlsm
+      state: latest
+      install_weak_deps: "{{ nvidia_install_weak_deps }}"
+    when:  (nvidia_use_open|default(false)) |bool   # This is needed for B300 and newers
+
   - name: blacklist nouveau
     community.general.kernel_blacklist:
       name: nouveau
