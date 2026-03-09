@@ -20,7 +20,7 @@
 
 - name: Switch DNF nvidia-driver stream to the chosen branch
   ansible.builtin.command:
-    cmd: "dnf -y module enable nvidia-driver:{{ nvidia_driver_branch }}"
+    cmd: "dnf -y module enable nvidia-driver:{{ nvidia_driver_branch }}{{ '-open' if ( nvidia_use_open|default(false) ) else '' }}"
   when: nvidia_driver_switch_stream | default( True )
 
 - name: install nvidia management library from rpm repository
@@ -127,7 +127,7 @@
   - name: install precompiled nvidia mig-parted RPM from github
     ansible.builtin.dnf:
       name:
-        - "https://github.com/NVIDIA/mig-parted/releases/download/v{{ nvidia_mig_parted_version }}/nvidia-mig-manager-{{ nvidia_mig_parted_version }}-1.x86_64.rpm"
+        - "https://github.com/NVIDIA/mig-parted/releases/download/v{{ nvidia_mig_parted_version }}/nvidia-mig-manager-{{ nvidia_mig_parted_version }}-1.{{ nvidia_arch }}.rpm"
       disable_gpg_check: yes
       state: present
 

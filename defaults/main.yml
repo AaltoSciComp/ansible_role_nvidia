@@ -31,3 +31,5 @@ nvidia_driver_loadpeermem: False
 
 nvidia_install_mig_parted: false
 nvidia_mig_parted_version: 0.10.0
+
+nvidia_arch: "x86_64"
